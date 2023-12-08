@@ -1,6 +1,8 @@
-# test
+# muesify
 
-This template should help get you started developing with Vue 3 in Vite.
+## Spotify clone using Vue.js 3 and Bootstrap 5
+
+=======
 
 ## Recommended IDE Setup
 
