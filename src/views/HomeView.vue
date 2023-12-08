@@ -33,8 +33,7 @@ export default {
     const getProfile = (async () => {
       try {
         profile.value = await getUserProfile();
-        store.dispatch("setUser", profile.value);
-        console.log('profile', profile.value)
+        localStorage.setItem("user_id", profile.value.id);
       } catch (error) {
         console.error('Login error:', error);
       }
