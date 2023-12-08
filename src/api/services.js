@@ -1,5 +1,5 @@
 import { http } from "@/api/axios";
-import { ME_URL, PLAYLISTS_URL } from "@/api/endpoints";
+import { ME_URL, PLAYLISTS_URL, FEATURED_PLAYLISTS_URL } from "@/api/endpoints";
 
 export const getUserProfile = async () => {
     try {
@@ -14,6 +14,16 @@ export const getUserProfile = async () => {
 export const getUserPlaylists = async (id) => {
     try {
         const response = await http.get(PLAYLISTS_URL(id));
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+export const getPlaylist = async (id) => {
+    try {
+        const response = await http.get(PLAYLIST_URL(id));
         return response.data;
     } catch (error) {
         console.log(error);
