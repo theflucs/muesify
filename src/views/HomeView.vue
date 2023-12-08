@@ -20,8 +20,8 @@ export default {
     const profile = ref(null);
 
     onMounted(async () => {
-      if (isAuthenticated()) {
-        const res = await getProfile();
+      if (isAuthenticated() && store.state.user === null) {
+        await getProfile();
       }
     })
 
