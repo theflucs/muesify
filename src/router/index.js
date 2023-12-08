@@ -1,11 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { isAuthenticated } from "@/utils";
 import AuthView from "@/views/AuthView.vue";
 import Unauthorized from "@/views/Unauthorized.vue";
-
-const isAuthenticated = () => {
-    const accessToken = localStorage.getItem("access_token");
-    return accessToken !== null;
-};
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,7 +35,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !isAuthenticated()) {
-        console.log("redirect to unauth from router");
         next("/unauthorized");
     } else {
         next();

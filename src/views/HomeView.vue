@@ -7,7 +7,8 @@
 <script>
 import { onMounted, ref } from 'vue'
 import { useStore } from 'vuex';
-import { getUserProfile, getUserPlaylists } from '@/api/services.js'
+import { getUserProfile, getUserPlaylists } from '@/api/services'
+import { isAuthenticated } from "@/utils";
 
 export default {
   name: 'home',
@@ -17,11 +18,6 @@ export default {
   setup() {
     const store = useStore()
     const profile = ref(null);
-
-    const isAuthenticated = () => {
-      const accessToken = localStorage.getItem("access_token");
-      return accessToken !== null;
-    };
 
     onMounted(async () => {
       if (isAuthenticated()) {
