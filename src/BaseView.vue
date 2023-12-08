@@ -1,8 +1,4 @@
-<template>
-  <section id="about">
-    <h1>About page</h1>
-  </section>
-</template>
+<template></template>
 
 <script>
 export default {
