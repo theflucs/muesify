@@ -25,7 +25,7 @@ export default {
     const profile = ref(null);
 
     onMounted(async () => {
-      if (isAuthenticated() && store.state.user === null) {
+      if (isAuthenticated() && localStorage.getItem('user_id') !== null) {
         await getProfile();
       }
     })

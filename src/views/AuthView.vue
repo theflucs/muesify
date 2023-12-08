@@ -6,6 +6,7 @@
     <button class="btn btn-success pill" v-if="isAuth && !accessToken" @click="handleAuthentication">
       Login
     </button>
+    <HomeView v-if="userId" />
   </section>
 </template>
 
@@ -13,17 +14,21 @@
 import { ref, reactive, computed, watchEffect } from 'vue'
 import { getUserAuth, getToken } from '@/api/auth';
 import { useRouter } from 'vue-router';
+import HomeView from './HomeView.vue';
 
 export default {
   name: 'auth',
+  components: {
+    HomeView
+  },
   setup() {
     const router = useRouter()
     const accessToken = ref(localStorage.getItem('access_token') !== null);
+    const userId = ref(localStorage.getItem('user_id') !== null);
     const routeParams = reactive({
       code: null
     });
-    const isAuth = computed(() => Boolean(routeParams.code));
-
+    const isAuth = computed(() => Boolean(routeParams.code) || Boolean(userId));
     const handleAuthentication = async () => {
       if (isAuth.value) {
         try {
@@ -52,7 +57,7 @@ export default {
     };
 
     return {
-      accessToken, isAuth, handleAuthentication, goToHome
+      accessToken, isAuth, handleAuthentication, goToHome, userId
     };
   }
 }
