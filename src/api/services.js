@@ -20,6 +20,10 @@ export const getUserPlaylists = async (id) => {
         throw error;
     }
 };
+
+export const getFeaturedPlaylists = async () => {
+    try {
+        const response = await http.get(FEATURED_PLAYLISTS_URL);
         return response.data;
     } catch (error) {
         console.log(error);
