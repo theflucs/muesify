@@ -6,13 +6,12 @@
     </nav>
     <h1>Muesify</h1>
   </header>
-
   <RouterView />
 </template>
 
-<script setup>
+<script>
 import { RouterLink, RouterView } from 'vue-router'
-
 </script>
+
 
 <style scoped></style>
