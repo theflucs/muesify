@@ -27,7 +27,7 @@ export default {
     const handleAuthentication = async () => {
       if (isAuth.value) {
         try {
-          const res = await getToken(routeParams.code);
+          await getToken(routeParams.code);
           accessToken.value = true;
           goToHome()
         } catch (error) {
@@ -35,7 +35,7 @@ export default {
         }
       } else {
         try {
-          const res = await getUserAuth();
+          await getUserAuth();
         } catch (error) {
           console.error('Authentication error:', error);
         }
