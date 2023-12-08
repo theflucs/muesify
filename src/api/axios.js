@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "@/router";
 import { SPOTIFY_BASE_API_URL } from "@/api/endpoints";
 import Unauthorized from "@/views/Unauthorized.vue";
 
@@ -16,41 +17,42 @@ http.interceptors.request.use((config) => {
 
 http.interceptors.response.use(
     (response) => response,
-    (error) => {
-        async (error) => {
-            if (error && error.status === 401) {
-                const data = {
-                    grant_type: "refresh_token",
-                    refresh_token: localStorage.getItem("refresh_token"),
-                    client_id: `${import.meta.env.VITE_CLIENT_ID}`,
-                };
-                const body = new URLSearchParams(data);
-                try {
-                    const res = await axios.post(
-                        "https://accounts.spotify.com/api/token",
-                        body
-                    );
-                    const { access_token, token_type, refresh_token } =
-                        res.data;
-                    localStorage.setItem("access_token", access_token);
-                    localStorage.setItem("token_type", token_type);
-                    localStorage.setItem("refresh_token", refresh_token);
-                    // error.response.config.headers.Authorization = `Bearer ${access_token}`
-                    return axios({
-                        ...error.response.config,
-                        headers: {
-                            ...error.response.config.headers,
-                            Authorization: `Bearer ${access_token}`,
-                        },
-                    });
-                } catch (error) {
-                    return Promise.reject(error, { component: Unauthorized });
-                }
-            } else {
-                console.log("An error occurred. Please try again later.");
-                return Promise.reject(error, { component: Unauthorized });
+    async (error) => {
+        if (error && error.status === 401) {
+            const data = {
+                grant_type: "refresh_token",
+                refresh_token: localStorage.getItem("refresh_token"),
+                client_id: `${import.meta.env.VITE_CLIENT_ID}`,
+            };
+            const body = new URLSearchParams(data);
+            try {
+                const res = await axios.post(
+                    "https://accounts.spotify.com/api/token",
+                    body
+                );
+                const { access_token, token_type, refresh_token } = res.data;
+                localStorage.setItem("access_token", access_token);
+                localStorage.setItem("token_type", token_type);
+                localStorage.setItem("refresh_token", refresh_token);
+                // error.response.config.headers.Authorization = `Bearer ${access_token}`
+                return axios({
+                    ...error.response.config,
+                    headers: {
+                        ...error.response.config.headers,
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                });
+            } catch (error) {
+                localStorage.clear();
+                router.push("/unauthorized");
+                return Promise.reject(error);
             }
-        };
+        } else {
+            localStorage.clear();
+            console.log("Error 401 Unauthorized");
+            router.push("/unauthorized");
+            return Promise.reject(error);
+        }
     }
 );
 
@@ -81,10 +83,14 @@ http.interceptors.response.use(
                 });
             } catch (error) {
                 localStorage.clear();
-                return Promise.reject(error, { component: Unauthorized });
+                console.log("Error trying to refresh token");
+                router.push("/unauthorized");
+                return Promise.reject(error);
             }
         } else {
-            console.log("An error occurred. Please try again later.");
+            localStorage.clear();
+            console.log("Error 401 Unauthorized");
+            router.push("/unauthorized");
             return Promise.reject(error);
         }
     }
