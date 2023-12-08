@@ -1,7 +1,8 @@
 import axios from "axios";
+import { SPOTIFY_BASE_API_URL } from "@/api/endpoints";
 
 export const http = axios.create({
-    baseURL: "https://api.spotify.com/v1/",
+    baseURL: SPOTIFY_BASE_API_URL,
 });
 
 http.interceptors.request.use((config) => {
@@ -44,10 +45,7 @@ http.interceptors.response.use(
             };
             const body = new URLSearchParams(data);
             try {
-                const res = await axios.post(
-                    "https://accounts.spotify.com/api/token",
-                    body
-                );
+                const res = await axios.post(GET_TOKEN_URL, body);
                 const { access_token, token_type, refresh_token } = res.data;
                 localStorage.setItem("access_token", access_token);
                 localStorage.setItem("token_type", token_type);

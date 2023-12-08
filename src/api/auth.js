@@ -1,65 +1,23 @@
 import { http } from "@/api/axios";
-
-function generateCodeVerifier() {
-    const allowedCharacters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
-    const minLength = 43;
-    const maxLength = 128;
-
-    // Calculate a random length within the specified range
-    const length =
-        Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
-
-    // Generate a random string using the allowed characters
-    let codeVerifier = "";
-    for (let i = 0; i < length; i++) {
-        const randomIndex = Math.floor(
-            Math.random() * allowedCharacters.length
-        );
-        codeVerifier += allowedCharacters.charAt(randomIndex);
-    }
-
-    return codeVerifier;
-}
-
-async function generateCodeChallenge(codeVerifier) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(codeVerifier);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    const codeChallenge = base64urlencode(hashBuffer);
-    return codeChallenge;
-}
-
-function base64urlencode(buffer) {
-    const bytes = new Uint8Array(buffer);
-    let binary = "";
-    for (const byte of bytes) {
-        binary += String.fromCharCode(byte);
-    }
-    const base64 = btoa(binary);
-    const base64url = base64
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
-    return base64url;
-}
+import { generateCodeVerifier, generateCodeChallenge } from "@/api/utils";
+import { AUTH_URL, LOCAL_REDIRECT_URI, GET_TOKEN_URL } from "@/api/endpoints";
+import { SCOPE, CHALLENGE_METHOD, GRANT_TYPE } from "@/api/constants";
 
 export const getUserAuth = async () => {
     const codeVerifier = generateCodeVerifier();
     const codeChallenge = await generateCodeChallenge(codeVerifier);
 
-    const scope =
-        "playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-email user-read-private";
-    const authUrl = new URL("https://accounts.spotify.com/authorize");
+    const scope = SCOPE;
+    const authUrl = new URL(AUTH_URL);
     window.localStorage.setItem("code_verifier", codeVerifier);
 
     const params = {
         response_type: "code",
         client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
         scope,
-        code_challenge_method: "S256",
+        code_challenge_method: CHALLENGE_METHOD,
         code_challenge: codeChallenge,
-        redirect_uri: "http://localhost:5173",
+        redirect_uri: LOCAL_REDIRECT_URI,
     };
 
     authUrl.search = new URLSearchParams(params).toString();
@@ -71,15 +29,12 @@ export const getToken = async (code) => {
 
     const data = new URLSearchParams();
     data.append("client_id", import.meta.env.VITE_SPOTIFY_CLIENT_ID);
-    data.append("grant_type", "authorization_code");
+    data.append("grant_type", GRANT_TYPE);
     data.append("code", code);
-    data.append("redirect_uri", "http://localhost:5173");
+    data.append("redirect_uri", LOCAL_REDIRECT_URI);
     data.append("code_verifier", codeVerifier);
     try {
-        const response = await http.post(
-            "https://accounts.spotify.com/api/token",
-            data
-        );
+        const response = await http.post(GET_TOKEN_URL, data);
         const { access_token, token_type, refresh_token } = response.data;
         localStorage.setItem("access_token", access_token);
         localStorage.setItem("token_type", token_type);
