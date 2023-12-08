@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ref, reactive, computed, watchEffect } from 'vue'
+import { onMounted, ref, reactive, computed, watchEffect } from 'vue'
 import { getUserAuth, getToken } from '@/api/auth';
 import { useRouter } from 'vue-router';
 import HomeView from './HomeView.vue';
@@ -28,7 +28,7 @@ export default {
     const routeParams = reactive({
       code: null
     });
-    const isAuth = computed(() => Boolean(routeParams.code) || Boolean(userId));
+    const isAuth = computed(() => Boolean(routeParams.code) || userId.value);
     const handleAuthentication = async () => {
       if (isAuth.value) {
         try {

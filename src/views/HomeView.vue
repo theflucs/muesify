@@ -21,8 +21,9 @@ export default {
   },
   setup() {
     const profile = ref(null);
+    const userId = ref(localStorage.getItem('user_id') !== null);
     onMounted(async () => {
-      if (isAuthenticated() && localStorage.getItem('user_id') !== null) {
+      if (isAuthenticated() && !profile.value) {
         await getProfile();
       }
     })
@@ -30,7 +31,7 @@ export default {
     const getProfile = (async () => {
       try {
         profile.value = await getUserProfile();
-        localStorage.setItem("user_id", profile.value.id);
+        localStorage.setItem("user_id", profile.value?.id);
       } catch (error) {
         console.error('Login error:', error);
       }
