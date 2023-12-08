@@ -10,7 +10,6 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-import { useStore } from 'vuex';
 import { getUserProfile } from '@/api/services'
 import { isAuthenticated } from "@/utils";
 import List from '@/views/List.vue'
@@ -21,9 +20,7 @@ export default {
     List
   },
   setup() {
-    const store = useStore()
     const profile = ref(null);
-
     onMounted(async () => {
       if (isAuthenticated() && localStorage.getItem('user_id') !== null) {
         await getProfile();

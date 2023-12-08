@@ -6,7 +6,6 @@
 
 <script>
 import { onMounted, ref, computed } from 'vue'
-import { useStore } from 'vuex';
 import { getUserPlaylists, getFeaturedPlaylists } from '@/api/services'
 
 export default {
@@ -20,7 +19,6 @@ export default {
     },
   },
   setup(props) {
-    const store = useStore()
     const type = ref(props.type)
     const playlists = ref([])
     const tracks = computed(() => playlists.value?.items.map(p => p.tracks));
@@ -36,7 +34,7 @@ export default {
     })
     const getPlaylists = (async () => {
       try {
-        playlists.value = await getUserPlaylists(store.state.user.id);
+        playlists.value = await getUserPlaylists(localStorage.getItem("user_id"));
         console.log('playlists', playlists.value)
         console.log('tracks', tracks.value)
       } catch (error) {
