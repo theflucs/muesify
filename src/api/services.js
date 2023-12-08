@@ -8,3 +8,13 @@ export const getUserProfile = async () => {
         throw error;
     }
 };
+
+export const getUserPlaylists = async (id) => {
+    try {
+        const response = await http.get(`/users/${id}/playlists`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
