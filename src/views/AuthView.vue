@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, computed, watchEffect } from 'vue'
+import { ref, reactive, computed, watchEffect } from 'vue'
 import { getUserAuth, getToken } from '@/api/auth';
 import { useRouter } from 'vue-router';
 import HomeView from './HomeView.vue';
