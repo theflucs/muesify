@@ -1,33 +1,53 @@
 import { http } from "@/api/axios";
-const generateRandomString = (length) => {
-    const possible =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const values = crypto.getRandomValues(new Uint8Array(length));
-    return values.reduce((acc, x) => acc + possible[x % possible.length], "");
-};
 
-const sha256 = async (plain) => {
+function generateCodeVerifier() {
+    const allowedCharacters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
+    const minLength = 43;
+    const maxLength = 128;
+
+    // Calculate a random length within the specified range
+    const length =
+        Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+
+    // Generate a random string using the allowed characters
+    let codeVerifier = "";
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(
+            Math.random() * allowedCharacters.length
+        );
+        codeVerifier += allowedCharacters.charAt(randomIndex);
+    }
+
+    return codeVerifier;
+}
+
+async function generateCodeChallenge(codeVerifier) {
     const encoder = new TextEncoder();
-    const data = encoder.encode(plain);
-    return window.crypto.subtle.digest("SHA-256", data);
-};
+    const data = encoder.encode(codeVerifier);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const codeChallenge = base64urlencode(hashBuffer);
+    return codeChallenge;
+}
 
-const base64encode = async (plain) => {
-    const hash = await sha256(plain);
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(hash)))
+function base64urlencode(buffer) {
+    const bytes = new Uint8Array(buffer);
+    let binary = "";
+    for (const byte of bytes) {
+        binary += String.fromCharCode(byte);
+    }
+    const base64 = btoa(binary);
+    const base64url = base64
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
         .replace(/=+$/, "");
-
-    return base64;
-};
+    return base64url;
+}
 
 export const getUserAuth = async () => {
-    // const codeVerifier = generateRandomString(64)
-    // const hashed = await sha256(codeVerifier)
-    // const codeChallenge = base64encode(hashed)
-    const codeVerifier = import.meta.env.VITE_AUTH_CODE_VERIFIER;
-    const codeChallenge = import.meta.env.VITE_AUTH_CODE_CHALLENGE;
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
+
     const scope =
         "playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-email user-read-private";
     const authUrl = new URL("https://accounts.spotify.com/authorize");
