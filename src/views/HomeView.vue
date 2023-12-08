@@ -7,7 +7,7 @@
 <script>
 import { onMounted, ref } from 'vue'
 import { useStore } from 'vuex';
-import { getUserProfile, getUserPlaylists } from '@/api/services'
+import { getUserProfile } from '@/api/services'
 import { isAuthenticated } from "@/utils";
 
 export default {
@@ -29,21 +29,15 @@ export default {
       try {
         profile.value = await getUserProfile();
         store.dispatch("setUser", profile.value);
-        await getPlaylists();
+        console.log('profile', profile.value)
       } catch (error) {
-        console.error('Authentication error:', error);
+        console.error('Login error:', error);
       }
     })
-
-    const getPlaylists = (async () => {
-      try {
-        const userId = store.state.user.id;
-        const res = await getUserPlaylists(userId);
-        console.log('playlists', res.items)
-      } catch (error) {
-        console.error('Failed getting UserPlaylists', error);
-      }
-    })
+    return {
+      profile,
+      getProfile,
+    };
   }
 }
 </script>
