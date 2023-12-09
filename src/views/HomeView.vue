@@ -17,7 +17,7 @@ import List from '@/views/List.vue'
 export default {
   name: 'home',
   components: {
-    List
+    Playlists
   },
   setup() {
     const profile = ref(null);
