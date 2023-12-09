@@ -1,18 +1,19 @@
 <template>
   <main>
-    <section id="home-section">
-      <h1>Home</h1>
-      <List type="featuredPlaylists" />
-      <List type="playlists" v-if="profile" />
+    <section id="home-section" class="pt-5">
+      <h2 v-if="profile && sayWelcome" class="text-center">Welcome back, {{ profile.display_name }}</h2>
+      <Playlists type="featuredPlaylists" />
+      <Playlists type="playlists" v-if="profile" />
     </section>
   </main>
 </template>
 
 <script>
 import { onMounted, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router';
 import { getUserProfile } from '@/api/services'
 import { isAuthenticated } from "@/utils";
-import List from '@/views/List.vue'
+import Playlists from '@/views/Playlists.vue'
 
 export default {
   name: 'home',
@@ -21,7 +22,6 @@ export default {
   },
   setup() {
     const profile = ref(null);
-    const userId = ref(localStorage.getItem('user_id') !== null);
     onMounted(async () => {
       if (isAuthenticated() && !profile.value) {
         await getProfile();
@@ -32,6 +32,7 @@ export default {
       try {
         profile.value = await getUserProfile();
         localStorage.setItem("user_id", profile.value?.id);
+        localStorage.setItem("user_name", profile.value?.display_name);
       } catch (error) {
         console.error('Login error:', error);
       }
