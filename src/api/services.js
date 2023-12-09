@@ -1,9 +1,9 @@
 import { http } from "@/api/axios";
 import {
     ME_URL,
-    PLAYLISTS_URL,
+    GET_PLAYLIST_URL,
+    GET_PLAYLISTS_URL,
     FEATURED_PLAYLISTS_URL,
-    PLAYLIST_URL,
     GET_PLAYLIST_TRACKS_URL,
     DELETE_PLAYLIST_TRACKS_URL,
     EDIT_PLAYLIST_DETAILS_URL,
@@ -21,7 +21,7 @@ export const getUserProfile = async () => {
 
 export const getUserPlaylists = async (id, limit, offset) => {
     try {
-        const response = await http.get(PLAYLISTS_URL(id), {
+        const response = await http.get(GET_PLAYLISTS_URL(id), {
             params: {
                 limit,
                 offset,
@@ -51,7 +51,7 @@ export const getFeaturedPlaylists = async (limit, offset) => {
 
 export const getUserPlaylist = async (id) => {
     try {
-        const response = await http.get(PLAYLIST_URL(id));
+        const response = await http.get(GET_PLAYLIST_URL(id));
         return response.data;
     } catch (error) {
         console.log(error);
