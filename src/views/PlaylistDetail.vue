@@ -89,7 +89,8 @@ export default {
     onMounted(async () => {
       try {
         playlist.value = await getPlaylist()
-        playlistNameRef.value = playlist.value.name || '';
+
+        playlistNameRef.value = playlist.value.name | '';
         playlistDescriptionRef.value = playlist.value.description || '';
         isPublicRef.value = playlist.public || false
       } catch (error) {
@@ -126,8 +127,8 @@ export default {
       }
       console.log('payload', payload)
       try {
-        const res = await editPlaylist(payload)
-        await getPlaylist()
+        await editPlaylist(payload)
+        playlist.value = await getPlaylist()
       } catch (error) {
         console.error('Failed editing playlist details', error);
       }
