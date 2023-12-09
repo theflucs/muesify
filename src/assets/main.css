@@ -1,20 +1,36 @@
-#app {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-weight: normal;
+body {
+    background-color: #1e063c;
+    color: #f8f9fa;
 }
 
-a,
-.green {
+a {
     text-decoration: none;
-    color: hsla(160, 100%, 37%, 1);
-    transition: 0.4s;
-    padding: 3px;
+    font-weight: bold;
+}
+.r-link {
+    text-decoration: none;
+    font-weight: bold;
+    color: #1e063c;
+}
+li {
+    list-style-type: none;
 }
 
-@media (hover: hover) {
-    a:hover {
-        background-color: hsla(160, 100%, 37%, 0.2);
-    }
+.card {
+    background-color: #f7ecff;
+}
+.mue-purple {
+    color: #1e063c;
+    font-size: 2.5rem;
+}
+.mue-btn-yellow {
+    background-color: #cbf55c;
+    color: #1e063c;
+}
+.mue-btn-yellow:hover {
+    border: 1px solid #cbf55c;
+    color: #cbf55c;
+}
+.mue-yellow {
+    color: #cbf55c;
 }
