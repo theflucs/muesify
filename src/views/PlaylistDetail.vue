@@ -13,7 +13,7 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editPlaylistModalLabel">Edit you playlist</h1>
+                <h1 class="modal-title fs-5" id="editPlaylistModalLabel">Edit your playlist</h1>
                 <button type="button" class="btn-close close-btn" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -89,10 +89,12 @@ export default {
     onMounted(async () => {
       try {
         playlist.value = await getPlaylist()
-
-        playlistNameRef.value = playlist.value.name | '';
-        playlistDescriptionRef.value = playlist.value.description || '';
-        isPublicRef.value = playlist.public || false
+        if (playlist.value) {
+          playlistNameRef.value = playlist.value.name;
+          playlistDescriptionRef.value = playlist.value.description;
+          isPublicRef.value = playlist.value.public
+        }
+        console.log(playlistNameRef.value)
       } catch (error) {
         console.error('Failed getting User tracks', error);
       }
