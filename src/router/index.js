@@ -31,6 +31,24 @@ const router = createRouter({
             meta: { requiresAuth: true },
         },
     ],
+
+    scrollBehavior(to, from, savedPosition) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (to.hash) {
+                    return resolve({ selector: to.hash });
+                } else if (savedPosition) {
+                    return resolve(savedPosition);
+                } else {
+                    resolve(
+                        document
+                            .getElementById("app")
+                            .scrollIntoView({ behavior: "smooth" })
+                    );
+                }
+            }, 1200);
+        });
+    },
 });
 
 router.beforeEach((to, from, next) => {
