@@ -1,5 +1,11 @@
 import { http } from "@/api/axios";
-import { ME_URL, PLAYLISTS_URL, FEATURED_PLAYLISTS_URL } from "@/api/endpoints";
+import {
+    ME_URL,
+    PLAYLISTS_URL,
+    FEATURED_PLAYLISTS_URL,
+    PLAYLIST_URL,
+    PLAYLIST_TRACKS_URL,
+} from "@/api/endpoints";
 
 export const getUserProfile = async () => {
     try {
@@ -11,9 +17,14 @@ export const getUserProfile = async () => {
     }
 };
 
-export const getUserPlaylists = async (id) => {
+export const getUserPlaylists = async (id, limit, offset) => {
     try {
-        const response = await http.get(PLAYLISTS_URL(id));
+        const response = await http.get(PLAYLISTS_URL(id), {
+            params: {
+                limit,
+                offset,
+            },
+        });
         return response.data;
     } catch (error) {
         console.log(error);
@@ -21,19 +32,24 @@ export const getUserPlaylists = async (id) => {
     }
 };
 
-export const getPlaylist = async (id) => {
+export const getFeaturedPlaylists = async (limit, offset) => {
+    try {
+        const response = await http.get(FEATURED_PLAYLISTS_URL, {
+            params: {
+                limit,
+                offset,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+export const getUserPlaylist = async (id) => {
     try {
         const response = await http.get(PLAYLIST_URL(id));
-        return response.data;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-};
-
-export const getFeaturedPlaylists = async () => {
-    try {
-        const response = await http.get(FEATURED_PLAYLISTS_URL);
         return response.data;
     } catch (error) {
         console.log(error);
