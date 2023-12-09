@@ -1,13 +1,18 @@
 <template>
-  <section class="mx-auto mt-8 text-center">
-    <button class="btn btn-primary pill" v-if="!isAuth && !accessToken" @click="handleAuthentication">
-      Auth
-    </button>
-    <button class="btn btn-success pill" v-if="isAuth && !accessToken" @click="handleAuthentication">
-      Login
-    </button>
-    <HomeView v-if="userId" />
+  <section v-if="!userId" id="authorize-or-login" class="row d-flex text-center align-items-center vh-100">
+    <div class="col-md-6 mx-auto">
+      <h1 v-if="!isAuth && !accessToken" class="mb-4">Welcome to Muesify</h1>
+      <button class="btn mue-btn-yellow pill" v-if="!isAuth && !accessToken" @click="handleAuthentication">
+        Authorize in App
+      </button>
+      <h1 v-if="isAuth && !accessToken" class="mb-4">Just one last step...</h1>
+      <button class="btn mue-btn-yellow pill" v-if="isAuth && !accessToken" @click="handleAuthentication">
+        Login
+      </button>
+    </div>
   </section>
+
+  <HomeView v-if="userId" />
 </template>
 
 <script>
