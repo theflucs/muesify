@@ -48,7 +48,6 @@ http.interceptors.response.use(
                 return Promise.reject(error);
             }
         } else {
-            localStorage.clear();
             console.log("Error 401 Unauthorized");
             router.push("/unauthorized");
             return Promise.reject(error);
