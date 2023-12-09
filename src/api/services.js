@@ -4,7 +4,7 @@ import {
     PLAYLISTS_URL,
     FEATURED_PLAYLISTS_URL,
     PLAYLIST_URL,
-    PLAYLIST_TRACKS_URL,
+    GET_PLAYLIST_TRACKS_URL,
 } from "@/api/endpoints";
 
 export const getUserProfile = async () => {
