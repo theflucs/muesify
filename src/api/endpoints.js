@@ -7,3 +7,6 @@ export const PLAYLISTS_URL = (id) => `/users/${id}/playlists`;
 export const PLAYLIST_URL = (id) => `/playlists/${id}`;
 export const GET_PLAYLIST_TRACKS_URL = (id) => `/playlists/${id}/tracks`;
 export const FEATURED_PLAYLISTS_URL = "/browse/featured-playlists";
+export const DELETE_PLAYLIST_TRACKS_URL = (id) => `/playlists/${id}/tracks`;
+
+//edit playlist details
