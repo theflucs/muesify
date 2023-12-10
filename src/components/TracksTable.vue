@@ -2,29 +2,36 @@
   <section v-if="tracks.length > 0" id="tracks" class="container py-5">
     <div class="row">
       <div class="col">
-        <table class="table" v-if="tracks.length > 0">
+        <table class="table">
           <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col" v-for="tp in tracksProperties">
-                {{ tp }}
+                {{ formatString(tp) }}
               </th>
             </tr>
           </thead>
           <tbody class="table-striped">
-            <tr v-for="(track, trackIndex) in tracks" :key="trackIndex">
+            <tr v-for="(track, trackIndex) in  tracks " :key="trackIndex">
               <th scope="row">{{ trackIndex + 1 }}</th>
               <td>{{ track.track.name }}</td>
               <td>{{ track.track.album.name }} - {{ track.track.album.release_date }}</td>
               <td>{{ track.added_at }}</td>
-              <td>{{ track.track.popularity }}</td>
-              <td><i class="bi bi-trash3" @click="deleteTrack(track.track.uri)" role="button"></i></td>
+              <td>
+                <i v-for="star in Array(categorizePopularity(track.track.popularity)).fill()"
+                  class="bi bi-star-fill text-warning"></i>
+              </td>
+              <td>
+                <i class="bi bi-trash3 text-danger" aria-label="Delete playlist track"
+                  @click="deleteTrack(track.track.uri)" role="button" :disable="track.added_by.id !== userId"></i>
+                {{ track.added_by.id !== userId }}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div class="row">
+    <div class="row" v-if="showSeeMoreBtn">
       <div class="col d-flex justify-content-center">
         <button class="btn mue-btn-yellow btn-md" @click="seeMore">
           See more...
@@ -37,11 +44,11 @@
 <script>
 import { onMounted, ref, computed } from 'vue';
 import { getPlaylistTracks, deletePlaylistTrack } from '@/api/services'
+import { formatString, categorizePopularity } from '@/utils'
 
 export default {
   name: 'TracksTable',
   components: {
-
   },
   props: {
     playlistId: {
@@ -55,15 +62,15 @@ export default {
     const playlistId = ref(props.playlistId)
     const snapshotId = ref(props.snapshotId)
     const tracks = ref([])
-    const limit = ref(1);
+    const limit = ref(5);
     const offset = ref(0);
-    const showSeeMoreBtn = computed(() => {
-      return tracks.value.length >= offset.value + limit.value;
-    });
+    const showSeeMoreBtn = computed(() => tracks.value.length >= offset.value + limit.value);
+    const userId = ref(localStorage.getItem('user_id'));
 
     const tracksProperties = [
       'name', 'album', 'added_at', 'popularity', ''
     ]
+
     onMounted(async () => {
       try {
         await getTracks()
@@ -107,10 +114,17 @@ export default {
     };
 
     return {
-      tracksProperties, tracks, showSeeMoreBtn, seeMore, deleteTrack
+      tracksProperties, formatString, categorizePopularity, tracks, showSeeMoreBtn, seeMore, userId, deleteTrack
     }
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+th,
+td {
+  background-color: #400073;
+  color: #f7ecff;
+  border: none;
+}
+</style>
