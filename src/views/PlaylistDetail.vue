@@ -7,38 +7,8 @@
       <div class="col d-flex flex-column position-relative">
         <i v-if="ownsPlaylist" class="bi bi-pencil position-absolute top-0 end-0 mt-2 me-2" type="button"
           data-bs-toggle="modal" data-bs-target="#editPlaylistModal"></i>
-        <!-- Modal -->
-        <div class="modal fade" id="editPlaylistModal" tabindex="-1" aria-labelledby="editPlaylistModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editPlaylistModalLabel">Edit your playlist</h1>
-                <button type="button" class="btn-close close-btn" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <label for="inputPlaylistName">Name</label>
-                <input type="text" id="inputPlaylistName" class="form-control form-control-lg" placeholder="Name"
-                  v-model="playlistNameRef">
-                <label for="textareaEditPlaylistDescription">Description</label>
-
-                <textarea class="form-control text-area mt-2" id="textareaEditPlaylistDescription"
-                  placeholder="Description" v-model="playlistDescriptionRef"></textarea>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="isPlaylistPublic" id="isPlaylistPublic"
-                    v-model="isPublicRef" :checked="isPublicRef">
-                  <label class="form-check-label" for="isPlaylistPublic">
-                    Public
-                  </label>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" @click="save" data-bs-dismiss="modal">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <PlaylistEditModal :playlistNameRef="playlistNameRef" :playlistDescriptionRef="playlistDescriptionRef"
+          :isPublicRef="isPublicRef" @savePlaylistDetail="savePlaylistDetail" />
         <div>
           <h4>{{ isPublicLabel }} Playlist</h4>
           <h2>{{ playlist.name.toUpperCase() }} </h2>
@@ -69,11 +39,12 @@ import { useRoute } from 'vue-router';
 import { getUserPlaylist, editPlaylistDetails } from '@/api/services';
 import { removeHtmlTags } from '@/utils'
 import TracksTable from '@/components/TracksTable.vue'
-
+import PlaylistEditModal from '@/components/PlaylistEditModal.vue';
 export default {
   name: 'playlist-detail',
   components: {
-    TracksTable
+    TracksTable,
+    PlaylistEditModal
   },
   emits: ["clickSeeMore"],
   setup() {
@@ -120,16 +91,13 @@ export default {
       }
     }
 
-    const save = async () => {
-      const payload = {
-        playlistId: playlist.value.id,
-        name: playlistNameRef.value,
-        description: playlistDescriptionRef.value,
-        public: isPublicRef.value,
-      }
-      console.log('payload', payload)
+    const savePlaylistDetail = async (payload) => {
+      const updatedPayload = {
+        ...payload,
+        playlistId
+      };
       try {
-        await editPlaylist(payload)
+        await editPlaylist(updatedPayload)
         playlist.value = await getPlaylist()
       } catch (error) {
         console.error('Failed editing playlist details', error);
@@ -137,7 +105,7 @@ export default {
     }
 
     return {
-      playlist, tracks, removeHtmlTags, ownsPlaylist, isPublicLabel, getPropertyByString, playlistNameRef, playlistDescriptionRef, isPublicRef, save
+      playlist, tracks, removeHtmlTags, ownsPlaylist, isPublicLabel, getPropertyByString, playlistNameRef, playlistDescriptionRef, isPublicRef, savePlaylistDetail
     }
   }
 }
@@ -147,24 +115,5 @@ export default {
 .bi-pencil {
   font-size: 1.5rem;
   color: #cbf55c;
-}
-
-.modal-content {
-  border: 1px solid #cbf55c;
-}
-
-.modal-header,
-.modal-body,
-.modal-footer {
-  background-color: #1e063c;
-  color: #f8f9fa;
-}
-
-.close-btn {
-  color: #f8f9fa;
-}
-
-.text-area {
-  height: 12rem;
 }
 </style>
