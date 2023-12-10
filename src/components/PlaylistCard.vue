@@ -1,7 +1,8 @@
 <template>
   <RouterLink :to="{ name: 'playlist-detail', params: { playlistId: playlist.id } }">
     <div class="card h-100">
-      <img :src="playlist.images[0].url" class="card-img-top img-card" :alt="`Playlist ${playlist.name} image`">
+      <img v-if="playlistImg" :src="playlist.images[0].url" class="card-img-top img-card"
+        :alt="`Playlist ${playlist.name} image`">
       <h5 class="card-title mt-2 text-center">{{ playlist.name }}</h5>
       <div class="card-body d-flex px-2 pt-3 pb-0">
         <div class="flex-grow-1">
@@ -37,8 +38,10 @@ export default {
   setup(props) {
     const playlist = ref(props.playlist)
     const tracks = computed(() => playlist.value?.tracks);
+    const playlistImg = computed(() => playlist.value?.images.length > 0 ? playlist.value.images[0].url : null);
+
     return {
-      playlist, tracks
+      playlist, tracks, playlistImg
     }
   }
 }
