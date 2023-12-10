@@ -84,13 +84,19 @@ export default {
       }
     });
 
-    const getTracks = async () => {
+    const getTracks = async (more = true) => {
       isLoading.value = true;
       try {
         const res = await getPlaylistTracks(playlistId.value, limit.value, offset.value);
-        tracks.value.push(...res.items);
+        if (more) {
+          tracks.value.push(...res.items);
+        } else {
+          offset.value = res.offset
+          limit.value = res.limit
+          tracks.value = res.items;
+        }
       } catch (error) {
-        console.error('Failed getting playlist tracks', error);
+        console.error(error);
       } finally {
         isLoading.value = false;
       }
@@ -99,9 +105,9 @@ export default {
     const seeMore = async () => {
       offset.value += limit.value;
       try {
-        await getTracks();
+        await getTracks(true);
       } catch (error) {
-        console.error('Error fetching playlists:', error);
+        console.error('Error fetching more tracks:', error);
       }
     };
 
