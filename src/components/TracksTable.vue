@@ -22,8 +22,10 @@
                   class="bi bi-star-fill text-warning"></i>
               </td>
               <td>
-                <i class="bi bi-trash3 text-danger" aria-label="Delete playlist track"
-                  @click="deleteTrack(track.track.uri)" role="button" :disabled="track.added_by.id !== userId"></i>
+                <button :disabled="track.added_by.id !== userId" @click="deleteTrack(track.track.uri)"
+                  aria-label="Delete playlist track">
+                  <i class="bi bi-trash3 text-danger"></i>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -35,13 +37,14 @@
         <button v-if="!isLoading && showSeeMoreBtn" class="btn mue-btn-yellow btn-md" @click="seeMore">
           See more...
         </button>
-        <p v-if="!isLoading && !showSeeMoreBtn">No more tracks available</p>
         <div v-if="isLoading" class="spinner-border text-warning" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
     </div>
   </section>
+  <p class="mue-yellow text-center fw-bold" v-if="!isLoading && tracks.length === 0">This playlist doesn't contain any
+    tracks</p>
 </template>
 
 <script>
@@ -66,10 +69,9 @@ export default {
     const tracks = ref([]);
     const limit = ref(5);
     const offset = ref(0);
-    const showSeeMoreBtn = computed(() => tracks.value.length >= offset.value + limit.value);
+    const showSeeMoreBtn = computed(() => tracks.value?.length >= offset.value + limit.value);
     const userId = ref(localStorage.getItem('user_id'));
     const isLoading = ref(false);
-
     const tracksProperties = ['name', 'album', 'added_at', 'popularity', ''];
 
     onMounted(async () => {
@@ -80,13 +82,19 @@ export default {
       }
     });
 
-    const getTracks = async () => {
+    const getTracks = async (more = true) => {
       isLoading.value = true;
       try {
         const res = await getPlaylistTracks(playlistId.value, limit.value, offset.value);
-        tracks.value.push(...res.items);
+        if (more) {
+          tracks.value.push(...res.items);
+        } else {
+          offset.value = res.offset
+          limit.value = res.limit
+          tracks.value = res.items;
+        }
       } catch (error) {
-        console.error('Failed getting playlist tracks', error);
+        console.error(error);
       } finally {
         isLoading.value = false;
       }
@@ -95,9 +103,9 @@ export default {
     const seeMore = async () => {
       offset.value += limit.value;
       try {
-        await getTracks();
+        await getTracks(true);
       } catch (error) {
-        console.error('Error fetching playlists:', error);
+        console.error('Error fetching more tracks:', error);
       }
     };
 
@@ -105,15 +113,16 @@ export default {
       const payload = {
         playlistId: playlistId.value,
         snapshotId: snapshotId.value,
-        tracksUri: [{ uri }],
+        tracksUri: [{ uri }]
       };
       try {
         await deletePlaylistTrack(payload);
-        // toast success or error
-        tracks.value = await getTracks();
+        isLoading.value = true;
+        offset.value = 0;
+        await getTracks(false);
         alert('success');
       } catch (error) {
-        console.error('Failed deleting User track', error);
+        console.error('Failed deleting playlist track', error);
         alert('error');
       }
     };
