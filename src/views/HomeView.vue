@@ -2,7 +2,7 @@
   <Header v-if="showHeader" />
   <main>
     <section id="home-section" class="py-5">
-      <h2 v-if="profile" class="text-center">Welcome back, {{ profile.display_name }}</h2>
+      <h2 v-if="profile" class="text-center">Welcome, {{ profile.display_name }}</h2>
       <Playlists type="featuredPlaylists" />
       <Playlists type="playlists" v-if="profile" />
     </section>
