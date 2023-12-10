@@ -12,7 +12,7 @@
         <div>
           <h4>{{ isPublicLabel }} Playlist</h4>
           <h2>{{ playlist.name.toUpperCase() }} </h2>
-          <p v-if="playlist.description">{{ removeHtmlTags(playlist.description) }}</p>
+          <p v-if="playlist.description" class="mt-5">{{ removeHtmlTags(playlist.description) }}</p>
         </div>
         <div class="d-flex mt-auto flex-row">
           <p v-if="ownsPlaylist" class="mb-0">
