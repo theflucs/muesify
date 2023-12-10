@@ -44,6 +44,8 @@
       </div>
     </div>
   </section>
+  <p class="mue-yellow text-center fw-bold" v-if="!isLoading && tracks.length === 0">This playlist doesn't contain any
+    tracks</p>
 </template>
 
 <script>

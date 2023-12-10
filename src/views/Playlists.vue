@@ -25,6 +25,9 @@
       </div>
     </div>
   </section>
+  <p class="mue-yellow text-center fw-bold" v-if="!isLoading && playlists.length === 0">
+    There is no {{ formatString(type) }} available
+  </p>
 </template>
 
 <script>
