@@ -109,12 +109,11 @@ export default {
       };
       try {
         await deletePlaylistTrack(payload);
-        isLoading.value = true;
-        offset.value = 0;
-        await getTracks(false);
+        // toast success or error
+        tracks.value = await getTracks();
         alert('success');
       } catch (error) {
-        console.error('Failed deleting playlist track', error);
+        console.error('Failed deleting User track', error);
         alert('error');
       }
     };
