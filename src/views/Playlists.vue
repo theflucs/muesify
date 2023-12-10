@@ -1,16 +1,19 @@
 <template>
-  <section :id="type" class="container py-5">
-    <div class="row my-3">
+  <section v-if="playlists.length > 0" :id="type" class="container">
+    <div class="row my-5 d-flex flex-column align-items-end">
       <div class="col">
-        <h3 class="text-center pb-4">{{ formatString(type) }}</h3>
-        <div class="row gy-3">
-          <div v-for="p in playlists" :key="p.id" class="col-md-3">
-            <PlaylistCard :playlist="p" />
-          </div>
-        </div>
+        <h3 class="text-center pb-4">
+          <span v-if="type === 'playlists'">Your </span>{{ formatString(type) }}
+        </h3>
+        <h4 v-if="msg" class="text-center">{{ msg }}</h4>
       </div>
     </div>
-    <div class="row">
+    <div class="row gy-3">
+      <div class="col-md-3" v-for="p in playlists" :key="p.id">
+        <PlaylistCard :playlist="p" />
+      </div>
+    </div>
+    <div class="row pt-3">
       <div class="col d-flex justify-content-center">
         <button v-if="!isLoading && showSeeMoreBtn" class="btn mue-btn-yellow btn-md" @click="seeMore">
           See more...
@@ -49,6 +52,7 @@ export default {
     const offset = ref(0);
     const showSeeMoreBtn = computed(() => playlists.value.length >= offset.value + limit.value);
     const isLoading = ref(false);
+    const msg = ref(null);
 
     onMounted(async () => {
       if (type.value === 'playlists') {
@@ -81,6 +85,7 @@ export default {
       try {
         const res = await getFeaturedPlaylists(limit.value, offset.value);
         playlists.value.push(...res.playlists.items);
+        msg.value = res.message;
         history.pushState(
           {},
           null,
@@ -105,12 +110,13 @@ export default {
           await getFeatPlaylists();
         }
       } catch (error) {
-        console.error('Error fetching playlists:', error);
+        console.error('Error fetching mor playlists:', error);
       }
     };
 
     return {
       type,
+      msg,
       playlists,
       formatString,
       removeHtmlTags,
