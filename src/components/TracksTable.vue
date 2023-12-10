@@ -35,14 +35,13 @@
         <button v-if="!isLoading && showSeeMoreBtn" class="btn mue-btn-yellow btn-md" @click="seeMore">
           See more...
         </button>
+        <p v-if="!isLoading && !showSeeMoreBtn">No more tracks available</p>
         <div v-if="isLoading" class="spinner-border text-warning" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
     </div>
   </section>
-  <p class="mue-yellow text-center fw-bold" v-if="!isLoading && tracks.length === 0">This playlist doesn't contain any
-    tracks</p>
 </template>
 
 <script>
@@ -67,9 +66,10 @@ export default {
     const tracks = ref([]);
     const limit = ref(5);
     const offset = ref(0);
-    const showSeeMoreBtn = computed(() => tracks.value?.length >= offset.value + limit.value);
+    const showSeeMoreBtn = computed(() => tracks.value.length >= offset.value + limit.value);
     const userId = ref(localStorage.getItem('user_id'));
     const isLoading = ref(false);
+
     const tracksProperties = ['name', 'album', 'added_at', 'popularity', ''];
 
     onMounted(async () => {

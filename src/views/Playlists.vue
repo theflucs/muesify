@@ -18,13 +18,13 @@
         <button v-if="!isLoading && showSeeMoreBtn" class="btn mue-btn-yellow btn-md" @click="seeMore">
           See more...
         </button>
+        <p v-if="!isLoading && !showSeeMoreBtn">No more playlists available</p>
         <div v-if="isLoading" class="spinner-border text-warning" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
     </div>
   </section>
-  <p class="mue-yellow text-center fw-bold" v-if="!isLoading && playlists.length === 0"> No playlists available </p>
 </template>
 
 <script>
@@ -50,7 +50,7 @@ export default {
     const playlists = ref([]);
     const limit = ref(4);
     const offset = ref(0);
-    const showSeeMoreBtn = computed(() => playlists.value?.length >= offset.value + limit.value);
+    const showSeeMoreBtn = computed(() => playlists.value.length >= offset.value + limit.value);
     const isLoading = ref(false);
     const msg = ref(null);
 
