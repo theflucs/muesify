@@ -1,7 +1,7 @@
 <template>
   <RouterLink :to="{ name: 'playlist-detail', params: { playlistId: playlist.id } }">
     <div class="card h-100">
-      <img :src="playlist.images[0].url" class="card-img-top" :alt="`Playlist ${playlist.name} image`">
+      <img :src="playlist.images[0].url" class="card-img-top img-card" :alt="`Playlist ${playlist.name} image`">
       <h5 class="card-title mt-2 text-center">{{ playlist.name }}</h5>
       <div class="card-body d-flex px-2 pt-3 pb-0">
         <div class="flex-grow-1">
@@ -44,4 +44,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.img-card {
+  height: 18rem;
+}
+</style>
