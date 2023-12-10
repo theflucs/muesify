@@ -22,8 +22,10 @@
                   class="bi bi-star-fill text-warning"></i>
               </td>
               <td>
-                <i class="bi bi-trash3 text-danger" aria-label="Delete playlist track"
-                  @click="deleteTrack(track.track.uri)" role="button" :disabled="track.added_by.id !== userId"></i>
+                <button :disabled="track.added_by.id !== userId" @click="deleteTrack(track.track.uri)"
+                  aria-label="Delete playlist track">
+                  <i class="bi bi-trash3 text-danger"></i>
+                </button>
               </td>
             </tr>
           </tbody>
