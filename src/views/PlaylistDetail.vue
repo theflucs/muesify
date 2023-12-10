@@ -2,7 +2,7 @@
   <section v-if="playlist" id="playlist-detail" class="container py-5">
     <div class="row">
       <div class="col-md-3 d-flex align-items-center">
-        <img :src="playlist.images[0].url" class="card-img-top pb-1" :alt="`${playlist.name} cover image`">
+        <img v-if="playlistImg" :src="playlistImg" class="card-img-top pb-1" :alt="`${playlist.name} cover image`">
       </div>
       <div class="col d-flex flex-column position-relative">
         <i v-if="ownsPlaylist" class="bi bi-pencil position-absolute top-0 end-0 mt-2 me-2" type="button"
@@ -30,7 +30,7 @@
 
     </div>
   </section>
-  <TracksTable v-if="playlist" :playlistId="playlist.id" snapshotId: playlist.snapshot_id />
+  <TracksTable v-if="playlist" :playlistId="playlist.id" :snapshotId="playlist.snapshot_id" />
 </template>
 
 <script>
@@ -57,6 +57,8 @@ export default {
     const playlistDescriptionRef = ref('');
     const isPublicRef = ref('');
     const isPublicLabel = computed(() => playlist.value?.public ? 'Public' : 'Private');
+    const playlistImg = computed(() => playlist.value?.images.length > 0 ? playlist.value.images[0].url : null);
+
     onMounted(async () => {
       try {
         playlist.value = await getPlaylist()
@@ -104,7 +106,7 @@ export default {
     }
 
     return {
-      playlist, tracks, removeHtmlTags, ownsPlaylist, isPublicLabel, getPropertyByString, playlistNameRef, playlistDescriptionRef, isPublicRef, savePlaylistDetail
+      playlist, tracks, removeHtmlTags, ownsPlaylist, isPublicLabel, playlistImg, getPropertyByString, playlistNameRef, playlistDescriptionRef, isPublicRef, savePlaylistDetail
     }
   }
 }
