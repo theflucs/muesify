@@ -37,7 +37,6 @@
         <button v-if="!isLoading && showSeeMoreBtn" class="btn mue-btn-yellow btn-md" @click="seeMore">
           See more...
         </button>
-        <p v-if="!isLoading && !showSeeMoreBtn">No more tracks available</p>
         <div v-if="isLoading" class="spinner-border text-warning" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
