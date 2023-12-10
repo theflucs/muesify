@@ -31,7 +31,6 @@ export default {
       accessToken.value = localStorage.getItem("access_token");
     }
     const profile = ref(null);
-    console.log(accessToken.value)
     const openProfile = async () => {
       await getProfile();
     }
@@ -42,9 +41,8 @@ export default {
       }
       try {
         profile.value = await getUserProfile();
-        console.log('profile: ', profile.value);
       } catch (error) {
-        console.error('Login error:', error);
+        console.error('Login error: ', error);
       }
     }
 

@@ -20,9 +20,6 @@ http.interceptors.response.use(
         if (error.response && error.response.status === 401) {
             console.log("Unauthorized");
             if (localStorage.getItem("refresh_token")) {
-                console.log(
-                    "we have refresh token in localstorgae, try to refresh it"
-                );
                 const data = {
                     grant_type: "refresh_token",
                     refresh_token: localStorage.getItem("refresh_token"),
@@ -30,7 +27,6 @@ http.interceptors.response.use(
                 };
                 const body = new URLSearchParams(data);
                 try {
-                    console.log("Trying to get refresh token");
                     const res = await axios.post(GET_TOKEN_URL, body);
                     const { access_token, token_type, refresh_token } =
                         res.data;
@@ -49,14 +45,11 @@ http.interceptors.response.use(
                     return Promise.reject(error);
                 }
             } else {
-                console.log("no toke, start the auth flow");
                 router.push("/");
                 return Promise.reject(error);
             }
         } else {
-            // For other errors, just reject the promise
             console.log("Oops! Something went wrong.");
-            console.log("here");
             return Promise.reject(error);
         }
     }

@@ -65,9 +65,8 @@ export default {
           playlistDescriptionRef.value = playlist.value.description;
           isPublicRef.value = playlist.value.public
         }
-        console.log(playlistNameRef.value)
       } catch (error) {
-        console.error('Failed getting User tracks', error);
+        console.error(error);
       }
     });
     const getPropertyByString = (obj, propString) => {
@@ -87,7 +86,7 @@ export default {
       try {
         await editPlaylistDetails(payload);
       } catch (error) {
-        console.error('Failed getting single playlist', error);
+        console.error('Failed editing single playlist', error);
       }
     }
 

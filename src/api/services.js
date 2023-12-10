@@ -81,15 +81,11 @@ export const deletePlaylistTrack = async (payload) => {
         tracks: tracksUri,
         snapshot_id: snapshotId,
     };
-    console.log("data", data);
     try {
         const response = await http.delete(
             DELETE_PLAYLIST_TRACKS_URL(playlistId),
-            {
-                data,
-            }
+            { data }
         );
-        console.log(response);
         return response;
     } catch (error) {
         console.log(error);
@@ -104,8 +100,6 @@ export const editPlaylistDetails = async (payload) => {
         const response = await http.put(EDIT_PLAYLIST_DETAILS_URL(playlistId), {
             ...additionalProperties,
         });
-
-        console.log(response);
         return response;
     } catch (error) {
         console.log(error);
