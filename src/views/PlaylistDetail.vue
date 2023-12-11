@@ -27,10 +27,10 @@
           <p v-if="playlist.followers.total > 0" class="mb-0">Followers: {{ playlist.followers.total }} </p>
         </div>
       </div>
-
     </div>
+    <TracksTable :playlistId="playlist.id" :snapshotId="playlist.snapshot_id"
+      @update-playlist-tracks="updatePlaylistTracks" />
   </section>
-  <TracksTable v-if="playlist" :playlistId="playlist.id" :snapshotId="playlist.snapshot_id" />
 </template>
 
 <script>
@@ -75,11 +75,13 @@ export default {
       const props = propString.split('.');
       return props.reduce((prev, curr) => prev && prev[curr], obj);
     }
+    const updatePlaylistTracks = async () => {
+      playlist.value = await getPlaylist()
+    }
 
     const getPlaylist = async () => {
       try {
-        const res = await getUserPlaylist(playlistId);
-        return res
+        return await getUserPlaylist(playlistId);
       } catch (error) {
         console.error('Failed getting single playlist', error);
       }
@@ -106,7 +108,7 @@ export default {
     }
 
     return {
-      playlist, tracks, removeHtmlTags, ownsPlaylist, isPublicLabel, playlistImg, getPropertyByString, playlistNameRef, playlistDescriptionRef, isPublicRef, savePlaylistDetail
+      updatePlaylistTracks, playlist, tracks, removeHtmlTags, ownsPlaylist, isPublicLabel, playlistImg, getPropertyByString, playlistNameRef, playlistDescriptionRef, isPublicRef, savePlaylistDetail
     }
   }
 }

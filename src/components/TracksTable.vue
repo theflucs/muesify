@@ -56,6 +56,7 @@ import { formatString, categorizePopularity } from '@/utils';
 
 export default {
   name: 'TracksTable',
+  emits: ["updatePlaylistTracks"],
   components: {},
   props: {
     playlistId: {
@@ -65,7 +66,7 @@ export default {
       type: String,
     },
   },
-  setup(props) {
+  setup(props, context) {
     const playlistId = ref(props.playlistId);
     const snapshotId = ref(props.snapshotId);
     const tracks = ref([]);
@@ -121,6 +122,7 @@ export default {
         await deletePlaylistTrack(payload);
         isLoading.value = true;
         offset.value = 0;
+        context.emit('updatePlaylistTracks');
         await getTracks(false);
         alert('success');
       } catch (error) {
