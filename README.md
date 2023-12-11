@@ -4,14 +4,6 @@
 
 =======
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
 ## Project Setup
 
 ```sh
@@ -24,14 +16,23 @@ npm install
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Docker
 
 ```sh
-npm run build
+docker compose build
 ```
-
-### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+docker compose up
 ```
+It will run on port [http://localhost:5173/](http://localhost:5173/)
+
+#### To be able to access the app you need to:
+* have a spotify account
+* be granted the access by me (the app is linked to my Spotify dashboard)
+* agree to grant Spotify to access some of your data 
+
+#### To be able to use the functionalities implemented you need to have at least one personal playlist with few tracks in it.
+
+
+
