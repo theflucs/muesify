@@ -22,9 +22,11 @@
                   class="bi bi-star-fill text-warning"></i>
               </td>
               <td>
-                <button :disabled="track.added_by.id !== userId" @click="deleteTrack(track.track.uri)"
-                  aria-label="Delete playlist track">
-                  <i class="bi bi-trash3 text-danger"></i>
+                <button type="button" class="btn border-0" :disabled="track.added_by.id !== userId"
+                  @click="deleteTrack(track.track.uri)" aria-label="Delete playlist track" data-bs-toggle="tooltip"
+                  data-bs-placement="top" title="You can\'t delete a track from a playlist you don\'t own">
+                  <i :class="{ 'text-danger': track.added_by.id === userId, 'text-secondary': track.added_by.id !== userId }"
+                    class="bi bi-trash3"></i>
                 </button>
               </td>
             </tr>
