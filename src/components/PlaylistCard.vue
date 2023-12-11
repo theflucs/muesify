@@ -17,7 +17,7 @@
       <div class="card-footer text-center p-0">
         <a v-if="playlist.external_urls.spotify" :href="playlist.external_urls.spotify" target="_blank" role="button">
           <i class="bi bi-play-circle-fill mue-purple"></i></a>
-        <p class="mb-0 mt-n1">Open in Spotify</p>
+        <p class="mb-0 mt-n1">Open</p>
       </div>
     </div>
   </RouterLink>

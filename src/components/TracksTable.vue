@@ -1,7 +1,7 @@
 <template>
   <section v-if="tracks.length > 0" id="tracks" class="container py-5">
     <div class="row">
-      <div class="col">
+      <div class="col px-0">
         <table class="table">
           <thead>
             <tr>
@@ -34,7 +34,7 @@
     </div>
     <div class="row">
       <div class="col d-flex justify-content-center">
-        <button v-if="!isLoading && showSeeMoreBtn" class="btn mue-btn-yellow btn-md" @click="seeMore">
+        <button type="button" v-if="!isLoading && showSeeMoreBtn" class="btn mue-btn-yellow btn-md" @click="seeMore">
           See more...
         </button>
         <div v-if="isLoading" class="spinner-border text-warning" role="status">
@@ -72,7 +72,6 @@ export default {
     const showSeeMoreBtn = computed(() => tracks.value.length >= offset.value + limit.value);
     const userId = ref(localStorage.getItem('user_id'));
     const isLoading = ref(false);
-
     const tracksProperties = ['name', 'album', 'added_at', 'popularity', ''];
 
     onMounted(async () => {

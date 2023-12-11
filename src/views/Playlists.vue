@@ -15,7 +15,7 @@
     </div>
     <div class="row pt-3">
       <div class="col d-flex justify-content-center">
-        <button v-if="!isLoading && showSeeMoreBtn" class="btn mue-btn-yellow btn-md" @click="seeMore">
+        <button type="button" v-if="!isLoading && showSeeMoreBtn" class="btn mue-btn-yellow btn-md" @click="seeMore">
           See more...
         </button>
         <div v-if="isLoading" class="spinner-border text-warning" role="status">
