@@ -14,5 +14,5 @@ export default defineConfig({
             "@/": `${path.resolve(__dirname, "src")}/`,
         },
     },
-    base: "https://theflucs.github.io/muesify/",
+    // base: "https://theflucs.github.io/muesify/",
 });
